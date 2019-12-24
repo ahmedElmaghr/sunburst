@@ -1,0 +1,23 @@
+{
+  "name": "Organizations chart",
+  "children": [
+    { "name": "CEO", "children": [{ "name": "Mostafa TERRAB", "value": 1 }] },
+    {
+      "name": "SECRETARY",
+      "children": [{ "name": "Mohamed ELKADIRI", "value": 1 }]
+    },
+    {
+      "name": "CEO’S CABINET",
+      "children": [{ "name": "Marouane AMEZIANE", "value": 1 }]
+    },
+    {
+      "name": "DIRECTOR AUDIT",
+      "children": [
+        { "name": "Marouane AMEZIANE", "value": 1 },
+        { "name": "Marouane Sadiki", "value": 1 },
+        { "name": "Marouane AMEZIANE", "value": 1 },
+        { "name": "Marouane Sadiki", "value": 1 }
+      ]
+    }
+  ]
+}
