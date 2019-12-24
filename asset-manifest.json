@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/sunburst/static/css/main.b1f15495.chunk.css",
+    "main.js": "/sunburst/static/js/main.3ff934bd.chunk.js",
+    "main.js.map": "/sunburst/static/js/main.3ff934bd.chunk.js.map",
+    "runtime-main.js": "/sunburst/static/js/runtime-main.95f3d7ea.js",
+    "runtime-main.js.map": "/sunburst/static/js/runtime-main.95f3d7ea.js.map",
+    "static/css/2.17e5ed98.chunk.css": "/sunburst/static/css/2.17e5ed98.chunk.css",
+    "static/js/2.06b60052.chunk.js": "/sunburst/static/js/2.06b60052.chunk.js",
+    "static/js/2.06b60052.chunk.js.map": "/sunburst/static/js/2.06b60052.chunk.js.map",
+    "index.html": "/sunburst/index.html",
+    "precache-manifest.849bb1b85ff52343b460c313eb53f859.js": "/sunburst/precache-manifest.849bb1b85ff52343b460c313eb53f859.js",
+    "service-worker.js": "/sunburst/service-worker.js",
+    "static/css/2.17e5ed98.chunk.css.map": "/sunburst/static/css/2.17e5ed98.chunk.css.map",
+    "static/css/main.b1f15495.chunk.css.map": "/sunburst/static/css/main.b1f15495.chunk.css.map",
+    "static/js/2.06b60052.chunk.js.LICENSE": "/sunburst/static/js/2.06b60052.chunk.js.LICENSE",
+    "static/media/relations_medias_francais.tsv": "/sunburst/static/media/relations_medias_francais.f8ade238.tsv"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.95f3d7ea.js",
+    "static/css/2.17e5ed98.chunk.css",
+    "static/js/2.06b60052.chunk.js",
+    "static/css/main.b1f15495.chunk.css",
+    "static/js/main.3ff934bd.chunk.js"
+  ]
+}
