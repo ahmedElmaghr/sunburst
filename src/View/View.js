@@ -2,6 +2,8 @@ import * as d3 from "d3";
 import "./View.css";
 import tsvTest from "./../data/relations_medias_francais.tsv";
 import React from "react";
+import NodeDo from "./NodeDto"
+import NodeDto from "./NodeDto";
 class View extends React.Component {
   //width
   width = 932;
@@ -20,22 +22,87 @@ class View extends React.Component {
   componentWillReceiveProps(nextProps, nextContext) {}
 
   async tst() {
-    //const root = d3.hierarchy(data3);
     const tsv = await d3.tsv(tsvTest).then((resp, error) => {
+      if (error) throw error;
       return resp;
     });
     console.log("tsv", tsv);
-    var nestedData = d3
-      .nest()
-      .key(d => {
-        return d.root;
-      })
-      .key(d => {
-        return d.origine;
-      })
-      .entries(tsv);
-    this.dataTest = nestedData[0];
+    this.constructTree(tsv);
   }
+
+  constructTree = data => {
+    console.log("####### debut construct tree");
+    console.log("data entry", data);
+    //Step 1 : create a {name: node} map
+    var dataMap = [];
+    dataMap = data.reduce(function(map, node) {
+      map[node.name] = node;
+      return map;
+    }, {});
+    console.log("step 1 dataMap get node", dataMap);
+    //Step 2 : get root nodes
+    //Step 3 : create the tree array
+    var tree = [];
+    data.forEach(function(node) {
+      // find parent
+      var parent = dataMap[node.parent];
+      if (parent) {
+        // create child array if it doesn't exist
+        (parent.children || (parent.children = []))
+          // add node to parent's child array
+          .push(node);
+      } else {
+        // parent is null or missing
+        tree.push(node);
+      }
+    });
+    console.log("step 2 tree", tree);
+    console.log("####### fin construct tree");
+
+    this.dataTest = this.treeWrapper(tree);
+  };
+
+  getNodeRoots = data => {
+    if (!data) throw "error data is undefined";
+    console.log(data);
+    var parentList = [];
+    var nameList = [];
+
+    data.forEach(node => {
+      if (node.parent && !parentList.includes(node.parent)) {
+        parentList.push(node.parent);
+      }
+    });
+
+    data.forEach(node => {
+      if (node.name && !nameList.includes(node.name)) {
+        nameList.push(node.name);
+      }
+    });
+    var rootsNamesList = parentList.filter(item => {
+      return !nameList.includes(item);
+    });
+    var roots = [];
+    console.log("rootsNamesList", rootsNamesList);
+    console.log("data", data);
+    rootsNamesList.forEach(rootName => {
+      var node = data.filter(d => {
+        return d.name == rootName;
+      })[0];
+      //var root = {};
+      //root[rootName] =rootFromData;
+      console.log("rootName : ", rootName, "node : ", node, "data : ", data);
+      var root = new NodeDto(rootName, node);
+      console.log("NodeDto created as root", root);
+      roots.push(root);
+    });
+    console.log("roots", roots);
+    return roots;
+  };
+
+  treeWrapper = tree => {
+    return { name: "Media francais", children: tree };
+  };
 
   render() {
     //
@@ -82,7 +149,7 @@ class View extends React.Component {
       .join("path")
       .attr("fill", d => {
         while (d.depth > 1) d = d.parent;
-        return "pink";
+        return this.color2(d);
       })
       .attr("fill-opacity", d =>
         arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0
@@ -115,7 +182,8 @@ class View extends React.Component {
       .attr("fill-opacity", d => +labelVisible(d.current))
       .attr("transform", d => labelTransform(d.current))
       .text(d => {
-        let label = d.data.key ? d.data.key : d.data.cible;
+        //let label = d.data.key ? d.data.key : d.data.cible;
+        let label = d.data.name;
         if (label && label.length > 10) {
           label = label.slice(0, 10) + "...";
         }
@@ -197,15 +265,29 @@ class View extends React.Component {
 
     return svg.node();
   }
+
+  color2 = d => {
+    switch (d.data.name) {
+      case "Claude Perdriel":
+        return "blue";
+      case "Prisa":
+        return "red";
+      case "Xavier Niel":
+        return "orange";
+      case "AOL":
+        return "pink";
+      default : return "green";
+    }
+  };
+
   //Functions utils
   partition = data => {
     var root = d3
-      .hierarchy(this.dataTest, d => {
-        return d.values;
-      })
+      .hierarchy(this.dataTest)
       .sum(d => d.value)
       .sort((a, b) => b.value - a.value);
-    let partition = d3.partition().size([2 * Math.PI, root.height + 1])(root);
+    var size = [2 * Math.PI, root.height + 1];
+    let partition = d3.partition().size(size)(root);
     return partition;
   };
 

@@ -9,7 +9,7 @@ class Container extends React.Component {
   componentDidMount() {
     //getting the data from file and update the state.
 
-    if (json) {
+    if (json3) {
       this.setState({ data: json3});
     }
     if (relations_medias_francais) {

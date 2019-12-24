@@ -4,29 +4,32 @@
     {
       "name": "Claude Perdriel",
       "children": [
-        { "name": "Groupe Perdriel", "value": 1 },
+        { "name": "Groupe Perdriel",
+          "children": [
+            { "name": "Challenges", "value": 3 },
+            { "name": "Sciences & Avenir", "value": 1 }
+          ] },
         { "name": "Groupe Lâ€™Opinon", "value": 1 },
         { "name": "Le Nouveau Magazine litteraire", "value": 1 },
-        { "name": "Sophia Publications", "value": 1 }      
+        {
+          "name": "Sophia Publications",
+          "children": [
+            { "name": "Historia", "value": 1 },
+            { "name": "Lâ€™histoire", "value": 1 }
+          ]
+        }
       ]
-    },
-    {
-      "name": "Sophia Publications",
-      "children": [
-        { "name": "Historia", "value": 1 },
-        { "name": "Lâ€™histoire", "value": 1 }
-      ]      
     },
     {
       "name": "Groupe Perdriel",
-      "children": [{ "name": "Challenges", "value": 1 },
-        { "name": "Sciences & Avenir", "value": 1 }]
+      "children": [
+        { "name": "Challenges", "value": 1 },
+        { "name": "Sciences & Avenir", "value": 1 }
+      ]
     },
     {
       "name": "Prisa",
-      "children": [
-        { "name": "Le Monde libre", "value": 1 }
-      ]
+      "children": [{ "name": "Le Monde libre", "value": 1 }]
     },
     {
       "name": "Xavier Niel",
@@ -34,9 +37,10 @@
         { "name": "Groupe La Provence", "value": 1 },
         { "name": "Le Monde libre", "value": 1 },
         { "name": "Le Nouveau Magazine littÃ©raire", "value": 1 },
-        { "name": "Nice-Matin","children": [
-          { "name": "Corse Matin", "value": 1 }
-        ] }
+        {
+          "name": "Nice-Matin",
+          "children": [{ "name": "Corse Matin", "value": 1 }]
+        }
       ]
     }
   ]
