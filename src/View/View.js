@@ -1,16 +1,15 @@
 import * as d3 from "d3";
 import "./View.css";
 import tsvTest from "./../data/relations_medias_francais.tsv";
+import DataHelper from "./helper/DataHelper";
 import React from "react";
-import NodeDo from "./NodeDto"
-import NodeDto from "./NodeDto";
+
 class View extends React.Component {
   //width
   width = 932;
   //radius
   radius = this.width / 6;
-  //dataTest
-  dataTest = "";
+
   constructor(props) {
     super(props);
     this.state = {
@@ -18,96 +17,7 @@ class View extends React.Component {
     };
   }
 
-  componentDidMount() {}
-  componentWillReceiveProps(nextProps, nextContext) {}
-
-  async tst() {
-    const tsv = await d3.tsv(tsvTest).then((resp, error) => {
-      if (error) throw error;
-      return resp;
-    });
-    console.log("tsv", tsv);
-    this.constructTree(tsv);
-  }
-
-  constructTree = data => {
-    console.log("####### debut construct tree");
-    console.log("data entry", data);
-    //Step 1 : create a {name: node} map
-    var dataMap = [];
-    dataMap = data.reduce(function(map, node) {
-      map[node.name] = node;
-      return map;
-    }, {});
-    console.log("step 1 dataMap get node", dataMap);
-    //Step 2 : get root nodes
-    //Step 3 : create the tree array
-    var tree = [];
-    data.forEach(function(node) {
-      // find parent
-      var parent = dataMap[node.parent];
-      if (parent) {
-        // create child array if it doesn't exist
-        (parent.children || (parent.children = []))
-          // add node to parent's child array
-          .push(node);
-      } else {
-        // parent is null or missing
-        tree.push(node);
-      }
-    });
-    console.log("step 2 tree", tree);
-    console.log("####### fin construct tree");
-
-    this.dataTest = this.treeWrapper(tree);
-  };
-
-  getNodeRoots = data => {
-    if (!data) throw "error data is undefined";
-    console.log(data);
-    var parentList = [];
-    var nameList = [];
-
-    data.forEach(node => {
-      if (node.parent && !parentList.includes(node.parent)) {
-        parentList.push(node.parent);
-      }
-    });
-
-    data.forEach(node => {
-      if (node.name && !nameList.includes(node.name)) {
-        nameList.push(node.name);
-      }
-    });
-    var rootsNamesList = parentList.filter(item => {
-      return !nameList.includes(item);
-    });
-    var roots = [];
-    console.log("rootsNamesList", rootsNamesList);
-    console.log("data", data);
-    rootsNamesList.forEach(rootName => {
-      var node = data.filter(d => {
-        return d.name == rootName;
-      })[0];
-      //var root = {};
-      //root[rootName] =rootFromData;
-      console.log("rootName : ", rootName, "node : ", node, "data : ", data);
-      var root = new NodeDto(rootName, node);
-      console.log("NodeDto created as root", root);
-      roots.push(root);
-    });
-    console.log("roots", roots);
-    return roots;
-  };
-
-  treeWrapper = tree => {
-    return { name: "Media francais", children: tree };
-  };
-
   render() {
-    //
-    this.tst();
-    //
     const data = this.props.data;
     if (data) {
       this.drawSunburstChart(data);
@@ -116,10 +26,10 @@ class View extends React.Component {
   }
 
   //https://observablehq.com/d/54d3c0a047426724
-  async drawSunburstChart(data) {
+  drawSunburstChart = (data)=> {
     const width = this.width;
     const radius = this.radius;
-    const root = this.partition(data);
+    const root = this.partition(DataHelper.constructTree(data));
     var body = d3.select("body");
     root.each(d => (d.current = d));
     var divGlobal = body.append("div");
@@ -149,7 +59,7 @@ class View extends React.Component {
       .join("path")
       .attr("fill", d => {
         while (d.depth > 1) d = d.parent;
-        return this.color2(d);
+        return this.getColorByElement(d);
       })
       .attr("fill-opacity", d =>
         arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0
@@ -266,24 +176,29 @@ class View extends React.Component {
     return svg.node();
   }
 
-  color2 = d => {
+  getColorByElement = d => {
+    var rand1 = Math.random();
+    var rand2 = Math.random();
+    var rand3 = Math.random();
+    
     switch (d.data.name) {
       case "Claude Perdriel":
-        return "blue";
+        return "rgb(255,0,255)";
       case "Prisa":
         return "red";
       case "Xavier Niel":
         return "orange";
       case "AOL":
         return "pink";
-      default : return "green";
-    }
+      default:
+        return "rgb("+rand1*255+","+rand2*255+","+rand3*255+")";
+      }
   };
 
   //Functions utils
   partition = data => {
     var root = d3
-      .hierarchy(this.dataTest)
+      .hierarchy(data)
       .sum(d => d.value)
       .sort((a, b) => b.value - a.value);
     var size = [2 * Math.PI, root.height + 1];

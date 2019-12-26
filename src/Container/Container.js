@@ -2,7 +2,7 @@ import React from "react";
 import * as d3 from "d3";
 import View from "../View/View";
 import json3 from "./../data/data3.json";
-import json from "./../data/data.json";
+import tsvTest from "./../data/relations_medias_francais.tsv";
 import relations_medias_francais from "./../data/relations_medias_francais.tsv";
 class Container extends React.Component {
   state = {};
@@ -12,6 +12,11 @@ class Container extends React.Component {
     if (json3) {
       this.setState({ data: json3});
     }
+    d3.tsv(tsvTest).then((resp, error) => {
+      if (error) throw error;
+      this.setState({ data2: resp});
+    });
+
     if (relations_medias_francais) {
       d3.tsv(relations_medias_francais).then((response, error) => {
         if (error) {
@@ -26,23 +31,11 @@ class Container extends React.Component {
         });
       });
     }
-    /*
-        fetch("https://worldmap-ocp.s3.us-east-2.amazonaws.com/flare.json").then(
-          response => {
-            if (response.status !== 200) {
-              console.log(`There was a problem: ${response.status}`);
-              return;
-            }
-            response.json().then(data => {
-              console.log("response", data);
-              this.setState({ data });
-            });
-          }
-        );*/
   }
+  
   render() {
     return (
-        <View data={this.state.data}></View>
+        <View data={this.state.data2}></View>
     );
   }
 }

@@ -1,7 +1,9 @@
 class NodeDto {
-  constructor(name, node) {
+  constructor(id,name,parent,value) {
+    this.id = id;
     this.name = name;
-    this.node = node;
+    this.parent = parent;
+    this.value = value;
   }
 }
 
